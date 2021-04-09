@@ -7,34 +7,12 @@ import Pagination from './Pagination'
 function ReactTest() {
 
     const [movies, setMovies] = useState([]);
-
-    const [currentPage] = useState(1);
-    const [moviesPerPage] = useState(2);
-
-
-    const pages = [];
-
-    for (let i = 1; i <= Math.ceil(movies.length / moviesPerPage); i++) {
-        pages.push(i);
-    }
-
-    const renderPageNumbers = pages.map(number => {
-        return (
-            <li key={number} id={number}>
-                {number}
-            </li>
-        )
-    })
-
-
-    const indexOfLastMovie = currentPage + 10;
-    const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
-    console.log("indexOfFirstMovie", indexOfFirstMovie)
+    const [loading, setLoading] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [moviesPerPage] = useState(10)
 
     useEffect(() => {
         setMovies(MoviesData)
-        console.log(movies)
-
     }, [movies])
 
 
@@ -53,15 +31,19 @@ function ReactTest() {
         var buttonState = document.getElementById("button" + movieId).innerHTML
         movies.forEach(function (movie) {
             if (movie.id === movieId) {
-                if(buttonState === "like") {
+                if (buttonState === "like") {
                     document.getElementById("button" + movieId).innerHTML = "dislike"
                 }
-                if(buttonState === "dislike") {
+                if (buttonState === "dislike") {
                     document.getElementById("button" + movieId).innerHTML = "like"
                 }
             }
         })
     }
+
+
+    const indexOfLastMovie = currentPage * moviesPerPage;
+    const indexOfFirstMovies = indexOfLastMovie - moviesPerPage;
 
 
     return (
@@ -92,7 +74,7 @@ function ReactTest() {
                                     <h5 className="card-title">{movie.category}</h5>
                                     <button id={"button" + movie.id} className="btn btn-success" onClick={() => { toggler(movie.id) }} style={likeStyle}>
                                         like
-                                    </button>                                    
+                                    </button>
                                     <button className="btn btn-danger" onClick={() => deleteMovie(index)} style={likeStyle}>Delete</button>
                                     <div>Likes : {movie.likes}</div>
                                     <div>Dislikes : {movie.dislikes}</div>
@@ -103,12 +85,8 @@ function ReactTest() {
                     )
                 }
             </div>
-            <ul className="pageNumbers">
-                {renderPageNumbers}
-            </ul>
 
-            <Pagination />
-
+            <Pagination  setCurrentPage={setCurrentPage} />
         </>
     )
 }
