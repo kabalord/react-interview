@@ -9,13 +9,15 @@ function ReactTest() {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
-    const [moviesPerPage] = useState(10)
+    const [moviesPerPage] = useState(4)
 
     useEffect(() => {
+        setLoading(true)
         setMovies(MoviesData)
+        setLoading(false)
     }, [movies])
 
-
+    console.log("MoviesData", MoviesData)
 
     const likeStyle = {
         marginRight: "5px"
@@ -41,52 +43,63 @@ function ReactTest() {
         })
     }
 
+    if (loading && movies.length === 0) {
+        return <h2>Loading Movies...</h2>
+    }
 
     const indexOfLastMovie = currentPage * moviesPerPage;
-    const indexOfFirstMovies = indexOfLastMovie - moviesPerPage;
-
+    const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
+    const currentMovie = movies.slice(indexOfFirstMovie, indexOfLastMovie)
+    const howManyPages = Math.ceil(movies.length / moviesPerPage)
 
     return (
         <>
-            <div className="row">
-                <div className="col-12 text-center mb-1 mt-1"><h1>Movies</h1></div>
-                <div className="col-12 text-center mb-1 mt-1">
-                    <div className="input-group mb-3">
-                        <select className="custom-select" onChange={() => {
+            <div className="App">
+                <ul>
 
-                        }} >
-                            {movies.map((movie, index) => (
-                                <option key={index} value={movies.id}>
-                                    {movie.category}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    <div className="row">
+                        <div className="col-12 text-center mb-1 mt-1"><h1>Movies</h1></div>
+                        <div className="col-12 text-center mb-1 mt-1">
+                            <div className="input-group mb-3">
+                                <select className="custom-select" onChange={() => {
 
-                </div>
-                {
-                    movies.map((movie, index) => (
-                        <div className="mb-5 col-xs-12 col-sm-6 col-md-4" key={index}>
-                            <div className="card">
-                                <h3 className="card-header"><strong>{movie.id} {movie.title}</strong></h3>
-
-                                <div className="card-body">
-                                    <h5 className="card-title">{movie.category}</h5>
-                                    <button id={"button" + movie.id} className="btn btn-success" onClick={() => { toggler(movie.id) }} style={likeStyle}>
-                                        like
-                                    </button>
-                                    <button className="btn btn-danger" onClick={() => deleteMovie(index)} style={likeStyle}>Delete</button>
-                                    <div>Likes : {movie.likes}</div>
-                                    <div>Dislikes : {movie.dislikes}</div>
-                                </div>
+                                }} >
+                                    {movies.map((movie, index) => (
+                                        <option key={index} value={movies.id}>
+                                            {movie.category}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
-                        </div>
-                    )
-                    )
-                }
-            </div>
 
-            <Pagination  setCurrentPage={setCurrentPage} />
+                        </div>
+                        {
+                            currentMovie.map((movie, index) => (
+                                <div className="mb-5 col-xs-12 col-sm-12 col-md-6" key={index}>
+                                    <div className="card">
+                                        <h3 className="card-header"><strong>{movie.id} {movie.title}</strong></h3>
+
+                                        <div className="card-body">
+                                            <h5 className="card-title">{movie.category}</h5>
+                                            <button id={"button" + movie.id} className="btn btn-success" onClick={() => { toggler(movie.id) }} style={likeStyle}>
+                                                like
+                                    </button>
+                                            <button className="btn btn-danger" onClick={() => deleteMovie(index)} style={likeStyle}>Delete</button>
+                                            <div>Likes : {movie.likes}</div>
+                                            <div>Dislikes : {movie.dislikes}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                            )
+                        }
+                    </div>
+                </ul>
+            </div>
+            <Pagination setCurrentPage={setCurrentPage} />
+
+
+
         </>
     )
 }

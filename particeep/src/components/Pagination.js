@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import movies from "../movies";
 
-const Pagination = ({ pages = 10, setCurrentPage }) => {
+const Pagination = ({ pages = movies.length/3, setCurrentPage }) => {
 
   const numberOfPages = []
   for (let i = 1; i <= pages; i++) {
