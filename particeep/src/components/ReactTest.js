@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import MoviesData from './../movies';
 import Pagination from './Pagination'
+import Header from './Header'
+
 
 
 
@@ -54,11 +56,12 @@ function ReactTest() {
 
     return (
         <>
+
+            <Header />
             <div className="App">
                 <ul>
 
-                    <div className="row">
-                        <div className="col-12 text-center mb-1 mt-1"><h1>Movies</h1></div>
+                    <div className="row">                        
                         <div className="col-12 text-center mb-1 mt-1">
                             <div className="input-group mb-3">
                                 <select className="custom-select" onChange={() => {
@@ -97,7 +100,6 @@ function ReactTest() {
                 </ul>
             </div>
             <Pagination setCurrentPage={setCurrentPage} />
-
 
 
         </>
